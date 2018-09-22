@@ -5,6 +5,8 @@ public class Planet : MonoBehaviour
    [Range(2, 256)]
    public int resolution = 10;
 
+   public bool autoUpdate;
+
    public ShapeSettings shapeSettings;
    public ColorSettings colorSettings;
 
@@ -17,11 +19,6 @@ public class Planet : MonoBehaviour
 
    [HideInInspector] public bool shapeSettingsFoldout;
    [HideInInspector] public bool colorSettingsFoldout;
-
-   private void OnValidate()
-   {
-      GeneratePlanet();
-   }
 
    void Initialize()
    {
@@ -61,12 +58,18 @@ public class Planet : MonoBehaviour
 
    public void OnShapeSettingsUpdated()
    {
+      if (!autoUpdate)
+         return;
+
       Initialize();
       GenerateMesh();
    }
 
    public void OnColorSettingsUpdated()
    {
+      if (!autoUpdate)
+         return;
+
       Initialize();
       GenerateColors();
    }

@@ -1,34 +1,52 @@
 ﻿using System;
 using UnityEditor;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 [CustomEditor(typeof(Planet))]
 public class PlanetEditor : Editor
 {
    private Planet planet;
+   private Editor shapeEditor, colorEditor;
 
    public override void OnInspectorGUI()
    {
-      base.OnInspectorGUI();
+      using (var check = new EditorGUI.ChangeCheckScope())
+      {
+         base.OnInspectorGUI();
 
-      DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout);
-      DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated, ref planet.colorSettingsFoldout);
+         if (check.changed)
+         {
+            planet.GeneratePlanet();
+         }
+      }
+
+      if (GUILayout.Button("Generate Planet"))
+      {
+         planet.GeneratePlanet();
+      }
+
+      DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout, ref shapeEditor);
+      DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated, ref planet.colorSettingsFoldout, ref colorEditor);
    }
 
-   void DrawSettingsEditor(Object settings, Action onSettingsUpdated, ref bool foldout)
+   void DrawSettingsEditor(Object settings, Action onSettingsUpdated, ref bool foldout, ref Editor editor)
    {
+      if (settings == null)
+         return;
+
       foldout = EditorGUILayout.InspectorTitlebar(foldout, settings);
       using (var check = new EditorGUI.ChangeCheckScope())
       {
-         if (foldout)
-         {
-            var editor = CreateEditor(settings);
-            editor.OnInspectorGUI();
+         if (!foldout)
+            return;
 
-            if (check.changed)
-            {
-               onSettingsUpdated?.Invoke();
-            }
+         CreateCachedEditor(settings, null, ref editor);
+         editor.OnInspectorGUI();
+
+         if (check.changed)
+         {
+            onSettingsUpdated?.Invoke();
          }
       }
    }
