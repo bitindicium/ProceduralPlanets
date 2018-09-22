@@ -46,8 +46,8 @@ local.properties
 #################
 .idea
 *.editorconfig
-/quantum_unity/Assets/Plugins/Editor/JetBrains*
-/quantum_unity/Assets/Plugins/Editor.meta
+Assets/Plugins/Editor/JetBrains*
+Assets/Plugins/Editor.meta
 
 #################
 ## Visual Studio
