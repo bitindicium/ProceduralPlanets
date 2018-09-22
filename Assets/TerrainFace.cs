@@ -2,13 +2,15 @@
 
 public class TerrainFace
 {
+   private ShapeGenerator shapeGenerator;
    private Mesh mesh;
    private int resolution;
    private Vector3 localUp;
    private Vector3 axisA, axisB;
 
-   public TerrainFace(Mesh mesh, int resolution, Vector3 localUp)
+   public TerrainFace(ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
    {
+      this.shapeGenerator = shapeGenerator;
       this.mesh = mesh;
       this.resolution = resolution;
       this.localUp = localUp;
@@ -32,7 +34,7 @@ public class TerrainFace
             var pointOnUnitCube = localUp + (percent.x - 0.5f) * 2 * axisA + (percent.y - 0.5f) * 2 * axisB;
             var pointOnUnitSpere = pointOnUnitCube.normalized;
 
-            vertices[i] = pointOnUnitSpere;
+            vertices[i] = shapeGenerator.CalculatePointOnPlanet(pointOnUnitSpere);
 
             if (x != resolution - 1 && y != resolution - 1)
             {
