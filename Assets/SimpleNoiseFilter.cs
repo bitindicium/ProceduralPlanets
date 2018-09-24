@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public class NoiseFilter
+public class SimpleNoiseFilter : INoiseFilter
 {
-   private NoiseSettings settings;
+   private NoiseSettings.SimpleNoiseSettings settings;
    private Noise noise = new Noise();
 
-   public NoiseFilter(NoiseSettings settings)
+   public SimpleNoiseFilter(NoiseSettings.SimpleNoiseSettings settings)
    {
       this.settings = settings;
    }
